@@ -1,0 +1,532 @@
+@import 'tailwindcss';
+
+/* Whiteboard and marker ink. Hi-vis marks pain points and nothing else. */
+:root {
+  --paper: #f2f4f3;
+  --sheet: #ffffff;
+  --ink: #172033;
+  --muted: #566175;
+  --rule: #d3d9df;
+  --hivis: #ffcf3f;
+  --on-hivis: #172033;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0f1726;
+    --sheet: #172238;
+    --ink: #e8ecf2;
+    --muted: #a5afbf;
+    --rule: #2b364b;
+    --hivis: #f5b800;
+  }
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-sheet: var(--sheet);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-hivis: var(--hivis);
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    background: var(--paper);
+    color: var(--ink);
+    color-scheme: light dark;
+  }
+
+  body {
+    font-size: 1.125rem;
+    line-height: 1.55;
+    text-rendering: optimizeLegibility;
+  }
+
+  a {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  ::selection {
+    background: var(--hivis);
+    color: var(--on-hivis);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  .skip {
+    position: absolute;
+    top: -3rem;
+    left: 1rem;
+    z-index: 10;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .skip:focus {
+    top: 1rem;
+  }
+
+  /* Buttons share the task shape from the process map. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.125rem;
+    border: 1.5px solid var(--ink);
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .btn:hover {
+    background: var(--sheet);
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .btn-primary:hover {
+    background: color-mix(in srgb, var(--ink) 82%, var(--paper));
+  }
+
+  /* Process map: BPMN pools, events, tasks and text annotations.
+     Lanes sit side by side and flow downwards on small screens, and stack
+     and flow left to right from 64rem. */
+  .pmap {
+    margin: 0;
+  }
+
+  .pmap-sheet {
+    padding: 1rem 0.75rem 0.875rem;
+    border-radius: 0.5rem;
+    background: var(--sheet);
+  }
+
+  .pmap-title {
+    margin: 0 0 0.875rem 0.125rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .pmap-lanes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.625rem;
+    align-items: start;
+  }
+
+  .lane {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border: 1.5px solid var(--ink);
+    border-radius: 2px;
+  }
+
+  .lane-label {
+    padding: 0.375rem 0.5rem;
+    border-bottom: 1.5px solid var(--ink);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    font-stretch: 125%;
+  }
+
+  .flow {
+    --conn: 1.125rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem 0.5rem 0.875rem;
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .event {
+    flex: none;
+    width: 1.375rem;
+    height: 1.375rem;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    background: var(--sheet);
+  }
+
+  .event-end {
+    border-width: 4px;
+  }
+
+  .node {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Sequence flow into each node: a line and an arrowhead. */
+  .node::before {
+    content: '';
+    flex: none;
+    width: 1.5px;
+    height: var(--conn);
+    background: var(--ink);
+  }
+
+  .node::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--conn) - 6px);
+    left: 50%;
+    translate: -50% 0;
+    border-inline: 4.5px solid transparent;
+    border-top: 6px solid var(--ink);
+  }
+
+  .task {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    min-height: 3.25rem;
+    padding: 0.4375rem 0.5rem;
+    border: 1.5px solid var(--ink);
+    border-radius: 0.375rem;
+    background: var(--sheet);
+    font-size: 0.8125rem;
+    line-height: 1.25;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .node[data-pain] .task {
+    background: var(--hivis);
+    color: var(--on-hivis);
+  }
+
+  .note {
+    position: relative;
+    align-self: stretch;
+    margin-top: 0.5rem;
+    padding: 0.125rem 0 0.125rem 0.5rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.3;
+  }
+
+  /* The text annotation's open bracket. */
+  .note::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 0.375rem;
+    border: 1.5px solid var(--muted);
+    border-right: 0;
+  }
+
+  .end-label {
+    margin-top: 0.25rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .pmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.875rem;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+
+  .pmap-legend .swatch {
+    width: 0.875rem;
+    height: 0.875rem;
+    border: 1.5px solid var(--ink);
+    border-radius: 3px;
+    background: var(--hivis);
+  }
+
+  .pmap-caption {
+    max-width: 62ch;
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  .pmap-caption a {
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  @media (min-width: 64rem) {
+    .pmap-sheet {
+      padding: 1.5rem 1.75rem 1.25rem;
+    }
+
+    .pmap-title {
+      margin-bottom: 1.125rem;
+    }
+
+    .pmap-lanes {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
+    }
+
+    .lane {
+      grid-template-rows: none;
+      grid-template-columns: 2.25rem minmax(0, 1fr);
+    }
+
+    /* Pool label reads bottom to top, as in BPMN. Rotated, its left border
+       lands between the label and the lane. */
+    .lane-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 0;
+      border-bottom: 0;
+      border-left: 1.5px solid var(--ink);
+      writing-mode: vertical-rl;
+      rotate: 180deg;
+    }
+
+    .flow {
+      --conn: 1.75rem;
+      --task-w: clamp(7rem, 10.5vw, 9rem);
+      --task-h: 4.5rem;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 1.25rem 1.25rem 1.25rem 1rem;
+    }
+
+    .lane[data-notes] .flow {
+      padding-bottom: 4.5rem;
+    }
+
+    .flow > .event,
+    .node-end .event {
+      margin-top: calc((var(--task-h) - 1.375rem) / 2);
+    }
+
+    .steps {
+      flex-direction: row;
+      align-self: auto;
+    }
+
+    .node {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+
+    .node::before {
+      width: var(--conn);
+      height: 1.5px;
+      margin-top: calc(var(--task-h) / 2 - 0.75px);
+    }
+
+    .node::after {
+      top: calc(var(--task-h) / 2 - 4.5px);
+      left: calc(var(--conn) - 6px);
+      translate: none;
+      border-inline: 0;
+      border-block: 4.5px solid transparent;
+      border-left: 6px solid var(--ink);
+    }
+
+    .task {
+      align-self: auto;
+      width: var(--task-w);
+      height: var(--task-h);
+      min-height: 0;
+      font-size: 0.875rem;
+    }
+
+    .note {
+      position: absolute;
+      top: calc(var(--task-h) + 1rem);
+      left: calc(var(--conn) + 0.75rem);
+      align-self: auto;
+      width: calc(var(--task-w) + var(--conn) - 1.25rem);
+      margin: 0;
+    }
+
+    /* Association: a dotted line back up to the task. */
+    .note::after {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      height: 1rem;
+      border-left: 1.5px dotted var(--muted);
+    }
+
+    .end-label {
+      position: absolute;
+      top: calc((var(--task-h) + 1.375rem) / 2 + 0.375rem);
+      left: calc(var(--conn) + 0.6875rem);
+      translate: -50% 0;
+      margin: 0;
+      white-space: nowrap;
+    }
+  }
+
+  /* The page's one moment of motion: the to-be flow draws itself, step by step. */
+  @media (prefers-reduced-motion: no-preference) {
+    .pmap[data-animate] .lane:last-child .node {
+      --from: 0 -0.5rem;
+      animation: flow-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(500ms + var(--i, 0) * 150ms);
+    }
+
+    @media (min-width: 64rem) {
+      .pmap[data-animate] .lane:last-child .node {
+        --from: -0.75rem 0;
+      }
+    }
+  }
+
+  @keyframes flow-in {
+    from {
+      opacity: 0;
+      translate: var(--from);
+    }
+  }
+
+  /* Case study and note bodies, rendered from Markdown. */
+  .md {
+    max-width: 68ch;
+  }
+
+  .md > * + * {
+    margin-top: 1.1em;
+  }
+
+  .md h2 {
+    margin-top: 2.25em;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    font-weight: 700;
+    font-stretch: 108%;
+  }
+
+  .md h3 {
+    margin-top: 1.75em;
+    font-size: 1.1875rem;
+    font-weight: 650;
+  }
+
+  .md ul,
+  .md ol {
+    padding-left: 1.25em;
+  }
+
+  .md ul {
+    list-style: disc;
+  }
+
+  .md ol {
+    list-style: decimal;
+  }
+
+  .md li + li {
+    margin-top: 0.4em;
+  }
+
+  .md li::marker {
+    color: var(--muted);
+  }
+
+  .md a {
+    text-decoration: underline;
+  }
+
+  .md strong {
+    font-weight: 650;
+  }
+
+  .md img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    background: var(--sheet);
+  }
+
+  .md table {
+    display: block;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .md th,
+  .md td {
+    padding: 0.5rem 1rem 0.5rem 0;
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .md th {
+    font-weight: 650;
+  }
+
+  .md blockquote {
+    padding-left: 1rem;
+    border-left: 3px solid var(--rule);
+    color: var(--muted);
+  }
+
+  .md code {
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+    background: var(--sheet);
+    font-size: 0.875em;
+  }
+
+  .md pre {
+    overflow-x: auto;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background: var(--sheet);
+    font-size: 0.875rem;
+  }
+
+  .md pre code {
+    padding: 0;
+    background: none;
+  }
+
+  /* Only rendered by `npm run dev`; production builds drop these. */
+  .todo {
+    padding: 0.75rem 1rem;
+    border: 1.5px dashed var(--ink);
+    border-radius: 0.375rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .todo::before {
+    content: 'To add: ';
+    font-weight: 700;
+  }
+}
