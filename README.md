@@ -27,6 +27,8 @@ Open http://localhost:3000.
 2. Fill in the frontmatter: `title`, `context`, `year`, `order` (lower comes first), `summary`, `outcome`, `methods`, `deliverables`, and optionally `role`, `tools` and `processMap`.
 3. Write the story underneath: the context, the problem, what you did, the result, and what you'd do differently. Tables, images and SQL code blocks all work in Markdown.
 
+Add `draft: true` to keep a case study off the published site while you write it (`reporting-dashboard.md` is one, waiting for your Power BI or Tableau project).
+
 For a BPMN-style process map, add `processMap` to the frontmatter (see `idriver.md`). Steps with `pain: true` are highlighted as pain points, and `note` adds a text annotation. The first case study with a map is the one on the home page.
 
 ## Reminders while you write

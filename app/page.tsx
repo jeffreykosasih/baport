@@ -101,17 +101,21 @@ export default function Home() {
               </p>
               <h3 className="mt-2 text-[1.25rem] font-bold">{step.title}</h3>
               <p className="mt-2 text-[1rem]">{step.text}</p>
-              <p className="mt-2 text-[0.9375rem] text-muted">
-                Shown in{' '}
-                {step.shownIn.map((slug, j) => (
-                  <span key={slug}>
-                    {j > 0 && ' and '}
-                    <Link className="underline" href={`/case-studies/${slug}`}>
-                      {titleOf(slug)}
-                    </Link>
-                  </span>
-                ))}
-              </p>
+              {step.shownIn?.length ? (
+                <p className="mt-2 text-[0.9375rem] text-muted">
+                  Shown in{' '}
+                  {step.shownIn.map((slug, j) => (
+                    <span key={slug}>
+                      {j > 0 && ' and '}
+                      <Link className="underline" href={`/case-studies/${slug}`}>
+                        {titleOf(slug)}
+                      </Link>
+                    </span>
+                  ))}
+                </p>
+              ) : (
+                step.evidence && <p className="mt-2 text-[0.9375rem] text-muted">{step.evidence}</p>
+              )}
             </li>
           ))}
         </ol>

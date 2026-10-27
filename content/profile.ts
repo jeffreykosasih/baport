@@ -10,7 +10,7 @@ export const profile = {
   resume: '/Jeffrey-Kosasih-Business-Analyst-Resume.pdf',
   designPortfolio: 'https://jeffreyko.com',
   // Once the 485 is granted, say until when, e.g. "Full work rights until March 2029."
-  workRights: 'Full work rights, available full-time.',
+  workRights: 'Full work rights in Australia, no sponsorship needed. Available full-time.',
   visa: 'Applying for a 2-year Temporary Graduate visa (subclass 485).',
   intro: [
     'I find out how work really happens, map it, and write requirements a team can build.',
@@ -18,9 +18,16 @@ export const profile = {
   ],
 };
 
-export type MethodStep = { title: string; text: string; shownIn: string[] };
+export type MethodStep = {
+  title: string;
+  text: string;
+  // Case study slugs (their file names) that show this step.
+  shownIn?: string[];
+  // Where this step is shown when it isn't a case study, e.g. a job.
+  evidence?: string;
+};
 
-// How you work, in order. `shownIn` lists case study slugs (their file names).
+// How you work, in order: the delivery lifecycle most BA job ads describe.
 export const method: MethodStep[] = [
   {
     title: 'Understand',
@@ -38,9 +45,19 @@ export const method: MethodStep[] = [
     shownIn: ['idriver', 'energyai'],
   },
   {
-    title: 'Check',
-    text: 'Plan UAT with the people who will use the change, set success measures, and test them with data.',
+    title: 'Deliver',
+    text: 'Work with developers across the SDLC, from discovery to release: backlog refinement, prioritisation and scope decisions in Agile and Scrum teams.',
+    evidence: 'Shown as Product Owner at Bank Central Asia',
+  },
+  {
+    title: 'Test',
+    text: 'Plan user acceptance testing with the people who will use the change, and agree what has to pass before release.',
     shownIn: ['idriver'],
+  },
+  {
+    title: 'Measure',
+    text: 'Set success measures and check them with data: SQL, Excel, and reporting in Power BI and Tableau (course in progress).',
+    shownIn: ['idriver', 'energyai'],
   },
 ];
 
@@ -86,24 +103,32 @@ export const experience: Job[] = [
   },
 ];
 
+// Grouped the way BA job ads list them, so a recruiter can match line by line.
 export const skills = [
   {
-    group: 'Business analysis',
+    group: 'Requirements and documentation',
     items:
-      'Requirements elicitation, stakeholder analysis, as-is and to-be process mapping (BPMN), process improvement, functional and non-functional requirements, user stories, acceptance criteria (Given/When/Then), MoSCoW, options analysis, business case, risk register, user acceptance testing (UAT), wireframes',
+      'Requirements elicitation, stakeholder analysis, functional and non-functional requirements, user stories with acceptance criteria (Given/When/Then), MoSCoW prioritisation, specs, wireframes',
   },
   {
-    group: 'Delivery',
-    items: 'Agile and Scrum, backlog refinement and prioritisation, SDLC from discovery to release',
+    group: 'Process and systems analysis',
+    items:
+      'As-is and to-be process mapping (BPMN), workflow and process improvement, options analysis, business case, risk register',
   },
   {
-    group: 'Data',
-    items: 'Excel, SQL (joins, GROUP BY), smart-meter data analysis (capstone)',
+    group: 'Testing and delivery',
+    items:
+      'User acceptance testing (UAT) planning, Agile and Scrum, backlog refinement and prioritisation, SDLC from discovery to release',
+  },
+  {
+    group: 'Data and reporting',
+    items:
+      'SQL (joins, GROUP BY), Excel, smart-meter data analysis (capstone), Power BI and Tableau (course, Oct–Dec 2026)',
   },
   {
     group: 'Tools and technical',
     items:
-      'Jira, draw.io, Cin7 (order software), Git and GitHub. I can read and write code (TypeScript, JavaScript, React).',
+      'Jira, draw.io, Cin7 (order management), Git and GitHub. I can read and write code (TypeScript, JavaScript, React, SwiftUI).',
   },
 ];
 

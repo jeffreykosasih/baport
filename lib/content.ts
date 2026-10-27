@@ -58,8 +58,10 @@ function readEntries(dir: string) {
     });
 }
 
+// Case studies and notes marked `draft: true` show in development only.
 export function getCaseStudies(): CaseStudy[] {
   return readEntries('case-studies')
+    .filter(({ data }) => SHOW_DRAFTS || !data.draft)
     .map(({ slug, data, content }) => ({
       slug,
       title: data.title,
