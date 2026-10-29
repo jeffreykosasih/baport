@@ -21,7 +21,7 @@ export function ProcessMap({
   return (
     <figure className="pmap" data-animate={animate || undefined}>
       <div className="pmap-sheet">
-        <p className="pmap-title">{map.title}</p>
+        <p className="pmap-title label text-muted">{map.title}</p>
         <div className="pmap-lanes">
           {map.lanes.map((lane) => (
             <section
@@ -30,7 +30,7 @@ export function ProcessMap({
               aria-label={`${lane.label} process`}
               data-notes={lane.steps.some((step) => step.note) || undefined}
             >
-              <p className="lane-label">{lane.label}</p>
+              <p className="lane-label label">{lane.label}</p>
               <div className="flow">
                 <span className="event" aria-hidden="true" />
                 <ol className="steps">
@@ -58,7 +58,7 @@ export function ProcessMap({
           ))}
         </div>
         {hasPain && (
-          <p className="pmap-legend">
+          <p className="pmap-legend label">
             <span className="swatch" aria-hidden="true" />
             Pain point
           </p>

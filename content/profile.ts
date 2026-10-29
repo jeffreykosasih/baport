@@ -12,9 +12,69 @@ export const profile = {
   // Once the 485 is granted, say until when, e.g. "Full work rights until March 2029."
   workRights: 'Full work rights in Australia, no sponsorship needed. Available full-time.',
   visa: 'Applying for a 2-year Temporary Graduate visa (subclass 485).',
-  intro: [
-    'I find out how work really happens, map it, and write requirements a team can build.',
-    'Before my Master of IT, I was a product owner in digital banking at Bank Central Asia. Since 2023 I’ve worked in Melbourne warehouses and on early-morning newspaper routes, using the kind of systems a business analyst works on.',
+  headline: 'I map how work really happens',
+  lead: 'Then I write the requirements a team can build, and plan the tests that prove the change worked.',
+  // The big statement under the hero.
+  statement:
+    'Product owner in digital banking. Three years on Melbourne warehouse floors and delivery routes. A Master of IT. I bring all three to business analysis: the stakeholders, the technology, and the people doing the work.',
+  facts: [
+    { label: 'Product Owner', value: 'Bank Central Asia, 2022' },
+    { label: 'Warehouse and delivery', value: 'Melbourne, 2023 to now' },
+    { label: 'Master of IT', value: 'Kaplan Business School, graduating Dec 2026' },
+    { label: 'Work rights', value: 'Full work rights, no sponsorship needed' },
+  ],
+};
+
+// What a team gets from you. `art` picks the small drawing; `shownIn` lists case study slugs.
+export const deliverables = [
+  {
+    art: 'process',
+    title: 'Process maps',
+    text: 'As-is and to-be maps in BPMN, with the pain points marked, so the whole team works from one picture.',
+    shownIn: ['idriver'],
+  },
+  {
+    art: 'requirements',
+    title: 'Requirements',
+    text: 'Functional and non-functional requirements, prioritised with MoSCoW, each one written so it can be tested.',
+    shownIn: ['idriver'],
+  },
+  {
+    art: 'stories',
+    title: 'User stories',
+    text: 'Stories with Given/When/Then acceptance criteria that a developer can build and a tester can check.',
+    shownIn: ['idriver'],
+  },
+  {
+    art: 'testing',
+    title: 'UAT plans',
+    text: 'Who tests, what has to pass before release, and the success measures that show the change worked.',
+    shownIn: ['idriver'],
+  },
+  {
+    art: 'options',
+    title: 'Business cases',
+    text: 'Options compared on cost, risk, time to benefit and fit, with a recommendation and a staged plan.',
+    shownIn: ['energyai'],
+  },
+  {
+    art: 'sql',
+    title: 'SQL and reporting',
+    text: 'Queries that check the success measures, and reporting in Power BI and Tableau (course in progress).',
+    shownIn: ['idriver'],
+  },
+] as const;
+
+// The personal story band, next to your photo.
+export const story = {
+  kicker: 'Why the floor matters',
+  title: 'I’ve done the work the software is for',
+  image: '/jeffrey-kosasih.jpg',
+  imageAlt: 'Jeffrey Kosasih sitting among autumn trees',
+  paragraphs: [
+    'For three years I’ve picked and packed orders, driven forklifts and delivered newspapers on early-morning routes across Melbourne, alongside full-time study.',
+    'I’ve set up shipments in Cin7 and logged in to a delivery app at the start of every run, so I know what a slow or confusing screen costs a shift. The iDriver case study came out of those routes.',
+    'That’s why I start every analysis by watching how the work is really done.',
   ],
 };
 

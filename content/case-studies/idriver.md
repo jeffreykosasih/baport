@@ -1,6 +1,8 @@
 ---
 title: iDriver
 context: Self-initiated case study
+kind: Process improvement
+cover: /case-studies/idriver/proposed-screens.png
 year: 2026
 order: 1
 summary: >-
@@ -76,7 +78,47 @@ Every extra tap happens in the driver’s seat, while the papers are still in th
 - Wrote 10 requirements, prioritised with MoSCoW, and 6 user stories with Given/When/Then acceptance criteria.
 - Designed the flow around the run instead of the menu: map and list together, with package counts and delivered status on every stop.
 
-> [!TODO] Add the requirements as a table (ID, requirement, MoSCoW) and two or three user stories with their acceptance criteria.
+<!-- draft -->
+### Requirements
+
+Drafted from the pain points and the proposed flow. Swap in your own ten if they differ.
+
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| R1 | Show the driver’s runs for today on the first screen after login, with no search | Must |
+| R2 | Ask for the compliance check at the first login of a shift, not at every login | Must |
+| R3 | Save each compliance confirmation with the driver, date and time | Must |
+| R4 | Tie every proof-of-delivery photo to the address of the stop it was taken at | Must |
+| R5 | Take a driver from login to their route in no more than two steps | Must |
+| R6 | Show the run as a map and as a list on the same screen | Should |
+| R7 | Show the package count and delivered status on every stop | Should |
+| R8 | Let customer service find a delivery photo by address and date | Should |
+| R9 | Keep working when mobile reception drops mid-run, and sync when it returns | Should |
+| R10 | Show yesterday’s performance before the driver leaves the depot | Could |
+
+### User stories
+
+**Start the run without searching**
+
+As a driver, I want today’s runs listed when I open the app, so that I can start my route straight away.
+
+- Given I have runs assigned for today, when I log in, then my runs for today are listed on the first screen.
+- Given I have no runs assigned today, when I log in, then I see a message saying so.
+
+**Confirm compliance once per shift**
+
+As a driver, I want to confirm compliance once at the start of my shift, so that I don’t repeat it every time I log in.
+
+- Given it’s my first login of the shift, when I log in, then I’m asked to confirm compliance before I see my runs.
+- Given I already confirmed compliance this shift, when I log in again, then I go straight to my runs.
+
+**Back up a delivery with evidence**
+
+As a customer service officer, I want each delivery photo linked to its address, so that I can answer a complaint with evidence.
+
+- Given a driver takes a photo at a stop, when the photo is saved, then it is stored against that stop’s address, the date and the time.
+- Given a customer complains about an address, when I search for that address and date, then I see the delivery photo.
+<!-- /draft -->
 
 ## The proposed flow
 
@@ -88,7 +130,31 @@ Two steps from login to route instead of four. The compliance check is asked at 
 
 I planned UAT with 4 drivers and set 4 success measures, then tested the measures with SQL on a practice dataset of 32 drivers over 12 weeks.
 
-> [!TODO] List the 4 success measures and show one SQL query with its result.
+<!-- draft -->
+### Success measures
+
+| Measure | Today | Target |
+| --- | --- | --- |
+| Steps from login to route | 4 | 2 |
+| Compliance checks per driver per shift | One per login | 1 |
+| Delivery photos tied to an address | Not reliably | Every photo |
+| Minutes from login to first delivery | Baseline from the practice data | Below the baseline |
+
+### Checking a measure with SQL
+
+Compliance checks per driver per shift, week by week, from the practice dataset:
+
+```sql
+SELECT s.week,
+       COUNT(c.id) * 1.0 / COUNT(DISTINCT s.id) AS checks_per_shift
+FROM shifts AS s
+LEFT JOIN compliance_checks AS c ON c.shift_id = s.id
+GROUP BY s.week
+ORDER BY s.week;
+```
+<!-- /draft -->
+
+> [!TODO] Swap in your real table and column names, then add the query’s result from your practice dataset.
 
 ## Result
 

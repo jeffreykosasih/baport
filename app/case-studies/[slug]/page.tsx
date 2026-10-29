@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Band } from '@/components/Band';
 import { ProcessMap } from '@/components/ProcessMap';
 import { profile } from '@/content/profile';
 import { getCaseStudies, getCaseStudy } from '@/lib/content';
@@ -25,70 +25,67 @@ export default async function CaseStudyPage({ params }: Props) {
   if (!study) notFound();
 
   const others = getCaseStudies().filter((other) => other.slug !== slug);
+  const facts = [
+    { label: 'Outcome', value: study.outcome },
+    { label: 'Role', value: study.role },
+    { label: 'Methods', value: study.methods.join(', ') },
+    { label: 'Tools', value: study.tools.join(', ') },
+  ].filter((fact) => fact.value);
 
   return (
-    <article className="mx-auto max-w-6xl px-4 pb-16 sm:px-8">
-      <p className="pt-4 text-[0.9375rem]">
-        <Link className="text-muted underline-offset-4 hover:underline" href="/#case-studies">
-          All case studies
-        </Link>
-      </p>
-
-      <header className="mt-8 grid gap-x-16 gap-y-8 lg:mt-12 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-end">
-        <div>
-          <h1 className="text-[2.75rem] leading-[0.95] font-extrabold tracking-[-0.015em] [font-stretch:118%] sm:text-[3.5rem]">
-            {study.title}
-          </h1>
-          <p className="mt-3 text-muted">
-            {study.context}, {study.year}
-          </p>
-          <p className="mt-6 max-w-[56ch] text-[1.3125rem] leading-snug">{study.summary}</p>
+    <article>
+      <section className="band-night">
+        <div className="mx-auto max-w-7xl px-4 pt-8 pb-16 sm:px-8 lg:pt-14 lg:pb-20">
+          <Link className="label text-muted underline-offset-4 hover:text-fg hover:underline" href="/#work">
+            All case studies
+          </Link>
+          <div className="mt-10 flex flex-wrap gap-2">
+            {study.kind && <span className="chip label text-accent">{study.kind}</span>}
+            <span className="chip label text-muted">
+              {study.context}, {study.year}
+            </span>
+          </div>
+          <h1 className="display mt-6 text-[3.5rem] sm:text-[5rem] lg:text-[7rem]">{study.title}</h1>
+          <p className="mt-8 max-w-[56ch] text-[1.375rem] leading-snug">{study.summary}</p>
+          <dl className="mt-14 grid gap-x-10 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+            {facts.map((fact) => (
+              <div key={fact.label} className="border-t border-line pt-4">
+                <dt className="label text-accent">{fact.label}</dt>
+                <dd className="mt-1.5 text-[1rem]">{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+          {study.processMap && (
+            <div className="mt-16">
+              <ProcessMap map={study.processMap} />
+            </div>
+          )}
         </div>
-        <dl className="grid gap-4 text-[0.9375rem]">
-          <Fact label="Outcome">{study.outcome}</Fact>
-          {study.role && <Fact label="Role">{study.role}</Fact>}
-          {study.methods.length > 0 && <Fact label="Methods">{study.methods.join(', ')}</Fact>}
-          {study.tools.length > 0 && <Fact label="Tools">{study.tools.join(', ')}</Fact>}
-        </dl>
-      </header>
+      </section>
 
-      {study.processMap && (
-        <div className="mt-12 lg:mt-16">
-          <ProcessMap map={study.processMap} />
-        </div>
-      )}
+      <Band tone="day" className="py-16 lg:py-24">
+        <div className="md" dangerouslySetInnerHTML={{ __html: study.html }} />
+      </Band>
 
-      <div className="md mt-12 lg:mt-16" dangerouslySetInnerHTML={{ __html: study.html }} />
-
-      <footer className="mt-16 border-t border-rule pt-8">
+      <Band tone="night" className="py-16 lg:py-24">
         {others.map((other) => (
-          <div key={other.slug} className="mb-8 max-w-[62ch]">
-            <Link
-              className="text-[1.25rem] font-bold underline [font-stretch:112%]"
-              href={`/case-studies/${other.slug}`}
-            >
+          <div key={other.slug} className="mb-12 max-w-3xl">
+            <p className="label text-accent">Next case study</p>
+            <p className="display mt-4 text-[2.5rem] lg:text-[3.5rem]">{other.title}</p>
+            <p className="mt-4 text-muted">{other.summary}</p>
+            <Link className="btn mt-6" href={`/case-studies/${other.slug}`}>
               Read the {other.title} case study
             </Link>
-            <p className="mt-2 text-[1rem] text-muted">{other.summary}</p>
           </div>
         ))}
-        <p>
+        <p className="text-muted">
           Want to talk about this work?{' '}
-          <a className="underline" href={`mailto:${profile.email}`}>
+          <a className="text-fg underline" href={`mailto:${profile.email}`}>
             Email me
           </a>
           .
         </p>
-      </footer>
+      </Band>
     </article>
-  );
-}
-
-function Fact({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div>
-      <dt className="text-muted">{label}</dt>
-      <dd className="mt-0.5">{children}</dd>
-    </div>
   );
 }

@@ -11,6 +11,11 @@ export type CaseStudy = {
   slug: string;
   title: string;
   context: string;
+  // The kind of work, shown as a tag: "Process improvement", "Business case".
+  kind?: string;
+  // An image for the case study card, or a drawing when there is no image.
+  cover?: string;
+  coverArt?: 'barriers' | 'chart';
   year: number;
   order: number;
   summary: string;
@@ -35,12 +40,19 @@ export type Note = {
 // while you write (npm run dev) and are left out of the published site.
 const TODO_BLOCK = /^> \[!TODO\][^\n]*(?:\n>[^\n]*)*/gm;
 
+// Content between <!-- draft --> and <!-- /draft --> is suggested wording to
+// check. It shows in a draft box while you write and is left out of the
+// published site until you delete the two markers.
+const DRAFT_BLOCK = /<!--\s*draft\s*-->([\s\S]*?)<!--\s*\/draft\s*-->/g;
+
 function render(markdown: string) {
-  const prepared = markdown.replace(TODO_BLOCK, (block) => {
-    if (!SHOW_DRAFTS) return '';
-    const text = block.replace(/^> ?/gm, '').replace(/^\[!TODO\]\s*/, '');
-    return `<aside class="todo">${marked.parseInline(text, { async: false })}</aside>`;
-  });
+  const prepared = markdown
+    .replace(DRAFT_BLOCK, (_, body: string) => (SHOW_DRAFTS ? `<div class="draft">\n\n${body.trim()}\n\n</div>` : ''))
+    .replace(TODO_BLOCK, (block) => {
+      if (!SHOW_DRAFTS) return '';
+      const text = block.replace(/^> ?/gm, '').replace(/^\[!TODO\]\s*/, '');
+      return `<aside class="todo">${marked.parseInline(text, { async: false })}</aside>`;
+    });
   return marked.parse(prepared, { async: false });
 }
 
@@ -66,6 +78,9 @@ export function getCaseStudies(): CaseStudy[] {
       slug,
       title: data.title,
       context: data.context,
+      kind: data.kind,
+      cover: data.cover,
+      coverArt: data.coverArt,
       year: data.year,
       order: data.order ?? 99,
       summary: data.summary,

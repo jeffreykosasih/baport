@@ -1,15 +1,21 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Archivo } from 'next/font/google';
+import { Albert_Sans, IBM_Plex_Mono } from 'next/font/google';
 import Link from 'next/link';
 import { profile } from '@/content/profile';
 import './globals.css';
 
-// One family throughout; its wider widths set names and labels.
-const archivo = Archivo({
+// A Scandinavian geometric sans for everything, and a mono for labels.
+const albert = Albert_Sans({
   subsets: ['latin'],
-  axes: ['wdth'],
-  variable: '--font-archivo',
+  variable: '--font-albert',
+  display: 'swap',
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-plex-mono',
   display: 'swap',
 });
 
@@ -23,52 +29,49 @@ export const metadata: Metadata = {
   openGraph: { title, description, type: 'website', locale: 'en_AU' },
 };
 
+const nav = [
+  { href: '/#work', label: 'Work' },
+  { href: '/#approach', label: 'Approach' },
+  { href: '/#background', label: 'Background' },
+  { href: '/#contact', label: 'Contact' },
+];
+
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en-AU" className={archivo.variable}>
-      <body>
-        <a className="skip" href="#main">
+    <html lang="en-AU" className={`${albert.variable} ${plexMono.variable}`}>
+      <body className="band-night">
+        <a className="skip label" href="#main">
           Skip to content
         </a>
-        <header className="mx-auto flex max-w-6xl flex-wrap items-baseline justify-between gap-x-6 gap-y-2 px-4 py-5 sm:px-8">
-          <Link className="text-[1.0625rem] font-bold [font-stretch:112%]" href="/">
+        <header className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-5 sm:px-8">
+          <Link className="text-[1.0625rem] font-semibold tracking-wide uppercase" href="/">
             {profile.name}
           </Link>
-          <nav aria-label="Main">
-            <ul className="flex gap-x-5 text-[0.9375rem]">
-              <li className="max-sm:hidden">
-                <Link className="underline-offset-4 hover:underline" href="/#case-studies">
-                  Case studies
-                </Link>
-              </li>
-              <li className="max-sm:hidden">
-                <Link className="underline-offset-4 hover:underline" href="/#experience">
-                  Experience
-                </Link>
-              </li>
-              <li>
-                <a className="underline-offset-4 hover:underline" href={profile.resume}>
-                  Resume
-                </a>
-              </li>
-              <li>
-                <Link className="underline-offset-4 hover:underline" href="/#contact">
-                  Contact
-                </Link>
-              </li>
+          <nav aria-label="Main" className="flex items-center gap-6">
+            <ul className="label flex gap-6 max-lg:hidden">
+              {nav.map((item) => (
+                <li key={item.href}>
+                  <Link className="text-muted transition-colors hover:text-fg" href={item.href}>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
+            <a className="btn min-h-10 px-4" href={profile.resume}>
+              Resume
+            </a>
           </nav>
         </header>
         <main id="main">{children}</main>
-        <footer className="mx-auto max-w-6xl px-4 sm:px-8">
-          <div className="flex flex-wrap justify-between gap-x-6 gap-y-2 border-t border-rule py-8 text-[0.9375rem] text-muted">
+        <footer className="mx-auto max-w-7xl px-4 sm:px-8">
+          <div className="label flex flex-wrap justify-between gap-x-6 gap-y-2 border-t border-line py-8 text-muted">
             <p>
               © {new Date().getFullYear()} {profile.name}
             </p>
             {profile.designPortfolio && (
               <p>
                 Design work at{' '}
-                <a className="underline" href={profile.designPortfolio}>
+                <a className="text-fg underline" href={profile.designPortfolio}>
                   {profile.designPortfolio.replace('https://', '')}
                 </a>
               </p>

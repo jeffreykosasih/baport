@@ -41,6 +41,16 @@ A blockquote that starts with `[!TODO]` is a reminder to yourself:
 
 It shows as a dashed box in `npm run dev` and is left out of the published site.
 
+Suggested wording waiting for your check sits between draft markers:
+
+```md
+<!-- draft -->
+| ID | Requirement | Priority |
+<!-- /draft -->
+```
+
+It shows in an orange draft box in `npm run dev` and stays off the published site. Once it's accurate, delete the two marker lines and it publishes.
+
 ## Notes
 
 Copy `content/notes/_template.md` to a new file and write. The Notes section appears on the home page once a note is published (no `draft: true`).

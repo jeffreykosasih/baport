@@ -1,6 +1,8 @@
 ---
 title: EnergyAI
 context: Capstone, Kaplan Business School
+kind: Business case
+coverArt: barriers
 year: 2026
 order: 2
 summary: >-
@@ -43,9 +45,26 @@ Four barriers held the pilots back, and each one made the others harder to clear
 - Wrote the business case: objectives and success measures, scope, stakeholder analysis, benefits, a risk register and a staged plan with decision gates.
 - Backed it with analysis of public smart-meter data.
 
-> [!TODO] Add the options comparison as a table (option, cost, risk, time to first benefit, regulatory fit) and say which one you recommended.
+<!-- draft -->
+### Options compared
 
-> [!TODO] Show the staged plan: each stage, what it delivers, and the decision gate before the next one.
+Fill in your four options and how each scored. Keep the criteria; they’re the ones from your capstone.
+
+| Option | Cost | Risk | Time to first benefit | Regulatory fit |
+| --- | --- | --- | --- | --- |
+| A. … | … | … | … | … |
+| B. … | … | … | … | … |
+| C. … | … | … | … | … |
+| D. Staged approach (recommended) | … | … | … | … |
+
+### The staged plan
+
+| Stage | What it delivers | Decision gate before the next stage |
+| --- | --- | --- |
+| 1 | … | … |
+| 2 | … | … |
+| 3 | … | … |
+<!-- /draft -->
 
 > [!TODO] Add one finding or chart from the smart-meter analysis, and the top three risks from the register.
 

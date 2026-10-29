@@ -1,6 +1,8 @@
 ---
 title: Reporting dashboard (draft)
 context: Power BI and Tableau course project
+kind: Reporting
+coverArt: chart
 year: 2026
 order: 3
 draft: true

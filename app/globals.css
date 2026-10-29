@@ -1,47 +1,36 @@
 @import 'tailwindcss';
 
-/* Whiteboard and marker ink. Hi-vis marks pain points and nothing else. */
+/* Charcoal and day bands, with one signal colour: the hi-vis orange of a
+   warehouse floor. Each band sets the colours everything inside it reads. */
 :root {
-  --paper: #f2f4f3;
-  --sheet: #ffffff;
-  --ink: #172033;
-  --muted: #566175;
-  --rule: #d3d9df;
-  --hivis: #ffcf3f;
-  --on-hivis: #172033;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #0f1726;
-    --sheet: #172238;
-    --ink: #e8ecf2;
-    --muted: #a5afbf;
-    --rule: #2b364b;
-    --hivis: #f5b800;
-  }
+  --night: #171b1f;
+  --day: #f2f3f4;
+  --signal: #ff6a1a;
+  --signal-ink: #b93f06;
 }
 
 @theme inline {
-  --color-paper: var(--paper);
-  --color-sheet: var(--sheet);
-  --color-ink: var(--ink);
+  --color-fg: var(--fg);
   --color-muted: var(--muted);
-  --color-rule: var(--rule);
-  --color-hivis: var(--hivis);
-  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-sheet: var(--sheet);
+  --color-night: var(--night);
+  --color-day: var(--day);
+  --color-signal: var(--signal);
+  --font-sans: var(--font-albert), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
 @layer base {
   html {
-    background: var(--paper);
-    color: var(--ink);
-    color-scheme: light dark;
+    background: var(--night);
+    color-scheme: dark;
   }
 
   body {
     font-size: 1.125rem;
-    line-height: 1.55;
+    line-height: 1.6;
     text-rendering: optimizeLegibility;
   }
 
@@ -51,56 +40,115 @@
   }
 
   ::selection {
-    background: var(--hivis);
-    color: var(--on-hivis);
+    background: var(--signal);
+    color: var(--night);
   }
 
   :focus-visible {
-    outline: 2px solid var(--ink);
+    outline: 2px solid var(--fg);
     outline-offset: 3px;
     border-radius: 2px;
   }
 }
 
 @layer components {
+  .band-night,
+  .band-day {
+    background: var(--bg);
+    color: var(--fg);
+  }
+
+  .band-night {
+    --bg: var(--night);
+    --fg: var(--day);
+    --muted: #9ba3ac;
+    --line: rgb(242 243 244 / 0.16);
+    --accent: var(--signal);
+    --on-accent: var(--night);
+    --sheet: #1f2429;
+  }
+
+  .band-day {
+    --bg: var(--day);
+    --fg: var(--night);
+    --muted: #59616a;
+    --line: rgb(23 27 31 / 0.14);
+    --accent: var(--signal-ink);
+    --on-accent: #ffffff;
+    --sheet: #ffffff;
+  }
+
   .skip {
     position: absolute;
     top: -3rem;
     left: 1rem;
     z-index: 10;
     padding: 0.5rem 0.75rem;
-    border-radius: 0.375rem;
-    background: var(--ink);
-    color: var(--paper);
+    border-radius: 4px;
+    background: var(--signal);
+    color: var(--night);
   }
 
   .skip:focus {
     top: 1rem;
   }
 
-  /* Buttons share the task shape from the process map. */
+  /* Small uppercase mono labels: section kickers, tags, buttons, data. */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .display {
+    font-weight: 600;
+    line-height: 0.94;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
   .btn {
     display: inline-flex;
     align-items: center;
-    min-height: 2.75rem;
-    padding: 0.5rem 1.125rem;
-    border: 1.5px solid var(--ink);
-    border-radius: 0.375rem;
-    font-size: 1rem;
-    font-weight: 600;
+    justify-content: center;
+    min-height: 3rem;
+    padding: 0 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition:
+      background-color 150ms,
+      border-color 150ms;
   }
 
   .btn:hover {
-    background: var(--sheet);
+    border-color: var(--fg);
   }
 
-  .btn-primary {
-    background: var(--ink);
-    color: var(--paper);
+  .btn-signal {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
   }
 
-  .btn-primary:hover {
-    background: color-mix(in srgb, var(--ink) 82%, var(--paper));
+  .btn-signal:hover {
+    border-color: var(--fg);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 4px;
   }
 
   /* Process map: BPMN pools, events, tasks and text annotations.
@@ -112,14 +160,13 @@
 
   .pmap-sheet {
     padding: 1rem 0.75rem 0.875rem;
-    border-radius: 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
     background: var(--sheet);
   }
 
   .pmap-title {
     margin: 0 0 0.875rem 0.125rem;
-    font-size: 0.9375rem;
-    font-weight: 600;
   }
 
   .pmap-lanes {
@@ -132,16 +179,13 @@
   .lane {
     display: grid;
     grid-template-rows: auto 1fr;
-    border: 1.5px solid var(--ink);
+    border: 1.5px solid var(--fg);
     border-radius: 2px;
   }
 
   .lane-label {
     padding: 0.375rem 0.5rem;
-    border-bottom: 1.5px solid var(--ink);
-    font-size: 0.8125rem;
-    font-weight: 700;
-    font-stretch: 125%;
+    border-bottom: 1.5px solid var(--fg);
   }
 
   .flow {
@@ -165,7 +209,7 @@
     flex: none;
     width: 1.375rem;
     height: 1.375rem;
-    border: 1.5px solid var(--ink);
+    border: 1.5px solid var(--fg);
     border-radius: 50%;
     background: var(--sheet);
   }
@@ -187,7 +231,7 @@
     flex: none;
     width: 1.5px;
     height: var(--conn);
-    background: var(--ink);
+    background: var(--fg);
   }
 
   .node::after {
@@ -197,7 +241,7 @@
     left: 50%;
     translate: -50% 0;
     border-inline: 4.5px solid transparent;
-    border-top: 6px solid var(--ink);
+    border-top: 6px solid var(--fg);
   }
 
   .task {
@@ -207,7 +251,7 @@
     align-self: stretch;
     min-height: 3.25rem;
     padding: 0.4375rem 0.5rem;
-    border: 1.5px solid var(--ink);
+    border: 1.5px solid var(--fg);
     border-radius: 0.375rem;
     background: var(--sheet);
     font-size: 0.8125rem;
@@ -217,8 +261,9 @@
   }
 
   .node[data-pain] .task {
-    background: var(--hivis);
-    color: var(--on-hivis);
+    border-color: var(--signal);
+    background: var(--signal);
+    color: var(--night);
   }
 
   .note {
@@ -254,15 +299,13 @@
     gap: 0.5rem;
     margin-top: 0.875rem;
     color: var(--muted);
-    font-size: 0.8125rem;
   }
 
   .pmap-legend .swatch {
     width: 0.875rem;
     height: 0.875rem;
-    border: 1.5px solid var(--ink);
     border-radius: 3px;
-    background: var(--hivis);
+    background: var(--signal);
   }
 
   .pmap-caption {
@@ -273,7 +316,7 @@
   }
 
   .pmap-caption a {
-    color: var(--ink);
+    color: var(--fg);
     font-weight: 600;
     text-decoration: underline;
   }
@@ -305,14 +348,14 @@
       justify-content: center;
       padding: 0.75rem 0;
       border-bottom: 0;
-      border-left: 1.5px solid var(--ink);
+      border-left: 1.5px solid var(--fg);
       writing-mode: vertical-rl;
       rotate: 180deg;
     }
 
     .flow {
       --conn: 1.75rem;
-      --task-w: clamp(7rem, 10.5vw, 9rem);
+      --task-w: clamp(7rem, 10.5vw, 9.5rem);
       --task-h: 4.5rem;
       flex-direction: row;
       align-items: flex-start;
@@ -350,7 +393,7 @@
       translate: none;
       border-inline: 0;
       border-block: 4.5px solid transparent;
-      border-left: 6px solid var(--ink);
+      border-left: 6px solid var(--fg);
     }
 
     .task {
@@ -412,9 +455,72 @@
     }
   }
 
+  /* How I work: the steps laid out like stops on a delivery route. */
+  .route {
+    display: grid;
+    gap: 2.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .route-stop {
+    position: relative;
+    padding-left: 2.75rem;
+  }
+
+  .route-stop::before {
+    content: '';
+    position: absolute;
+    top: 1.75rem;
+    bottom: -2.25rem;
+    left: 0.75rem;
+    width: 2px;
+    background: var(--line);
+  }
+
+  .route-stop:last-child::before {
+    display: none;
+  }
+
+  .route-node {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 1.625rem;
+    height: 1.625rem;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--accent);
+  }
+
+  @media (min-width: 64rem) {
+    .route {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 1.75rem;
+    }
+
+    .route-stop {
+      padding-top: 3rem;
+      padding-left: 0;
+    }
+
+    .route-stop::before {
+      top: 0.75rem;
+      bottom: auto;
+      left: 1.625rem;
+      right: -1.75rem;
+      width: auto;
+      height: 2px;
+    }
+  }
+
   /* Case study and note bodies, rendered from Markdown. */
   .md {
-    max-width: 68ch;
+    max-width: 70ch;
   }
 
   .md > * + * {
@@ -422,17 +528,18 @@
   }
 
   .md h2 {
-    margin-top: 2.25em;
-    font-size: 1.5rem;
-    line-height: 1.25;
-    font-weight: 700;
-    font-stretch: 108%;
+    margin-top: 2.5em;
+    font-size: 1.75rem;
+    line-height: 1.1;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
   }
 
   .md h3 {
     margin-top: 1.75em;
-    font-size: 1.1875rem;
-    font-weight: 650;
+    font-size: 1.25rem;
+    font-weight: 600;
   }
 
   .md ul,
@@ -461,14 +568,14 @@
   }
 
   .md strong {
-    font-weight: 650;
+    font-weight: 600;
   }
 
   .md img {
     width: 100%;
     height: auto;
-    border-radius: 0.5rem;
-    background: var(--sheet);
+    border-radius: 6px;
+    background: var(--night);
   }
 
   .md table {
@@ -480,35 +587,41 @@
 
   .md th,
   .md td {
-    padding: 0.5rem 1rem 0.5rem 0;
-    border-bottom: 1px solid var(--rule);
+    padding: 0.625rem 1.25rem 0.625rem 0;
+    border-bottom: 1px solid var(--line);
     text-align: left;
     vertical-align: top;
   }
 
   .md th {
-    font-weight: 650;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .md blockquote {
     padding-left: 1rem;
-    border-left: 3px solid var(--rule);
-    color: var(--muted);
+    border-left: 3px solid var(--accent);
   }
 
   .md code {
     padding: 0.1em 0.3em;
     border-radius: 3px;
     background: var(--sheet);
-    font-size: 0.875em;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
   }
 
   .md pre {
     overflow-x: auto;
-    padding: 1rem;
-    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
     background: var(--sheet);
     font-size: 0.875rem;
+    line-height: 1.6;
   }
 
   .md pre code {
@@ -516,17 +629,41 @@
     background: none;
   }
 
-  /* Only rendered by `npm run dev`; production builds drop these. */
-  .todo {
-    padding: 0.75rem 1rem;
-    border: 1.5px dashed var(--ink);
-    border-radius: 0.375rem;
+  /* Only rendered by `npm run dev`; production builds drop both. */
+  .todo,
+  .draft {
+    padding: 0.875rem 1rem;
+    border-radius: 6px;
     font-size: 0.9375rem;
-    line-height: 1.5;
+  }
+
+  .todo {
+    border: 1.5px dashed var(--fg);
   }
 
   .todo::before {
     content: 'To add: ';
     font-weight: 700;
+  }
+
+  .draft {
+    border: 1.5px solid var(--signal);
+    background: color-mix(in srgb, var(--signal) 7%, transparent);
+  }
+
+  .draft > * + * {
+    margin-top: 1em;
+  }
+
+  .draft::before {
+    content: 'Draft: check it, then delete the draft markers to publish';
+    display: block;
+    margin-bottom: 0.75rem;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 }
