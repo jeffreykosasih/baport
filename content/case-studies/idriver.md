@@ -2,7 +2,7 @@
 title: iDriver
 context: Self-initiated case study
 kind: Process improvement
-cover: /case-studies/idriver/proposed-screens.png
+coverArt: flow
 year: 2026
 order: 1
 summary: >-

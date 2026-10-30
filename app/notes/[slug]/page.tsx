@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { profile } from '@/content/profile';
 import { formatDate, getNote, getNotes } from '@/lib/content';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -13,7 +14,13 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const note = getNote((await params).slug);
-  return note ? { title: note.title, description: note.summary } : {};
+  if (!note) return {};
+  return {
+    title: note.title,
+    description: note.summary,
+    // Without its own, a shared link would show the home page's title.
+    openGraph: { title: `${note.title} | ${profile.name}`, description: note.summary, type: 'article', locale: 'en_AU' },
+  };
 }
 
 export default async function NotePage({ params }: Props) {

@@ -13,7 +13,7 @@ export function Band({
   children: ReactNode;
 }) {
   return (
-    <section id={id} aria-labelledby={id ? `${id}-title` : undefined} className={`band-${tone} scroll-mt-4 ${className}`}>
+    <section id={id} aria-labelledby={id ? `${id}-title` : undefined} className={`band-${tone} ${className}`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-8">{children}</div>
     </section>
   );

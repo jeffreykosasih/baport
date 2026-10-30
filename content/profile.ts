@@ -1,6 +1,11 @@
 // Everything on the site that isn't a case study or a note. Edit it here;
 // the pages read from this file.
 
+import type { ArtKind } from '@/components/Art';
+
+// Shown next to your role at the top of the page, and in the About facts.
+const workRightsInBrief = 'Full work rights, no sponsorship needed';
+
 export const profile = {
   name: 'Jeffrey Kosasih',
   role: 'Junior ICT business analyst',
@@ -9,63 +14,27 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/jeffreykosasih',
   resume: '/Jeffrey-Kosasih-Business-Analyst-Resume.pdf',
   designPortfolio: 'https://jeffreyko.com',
+  // The site's address, used by link previews and the sitemap. Change it when
+  // you add your own domain.
+  site: 'https://jk-ba-port.vercel.app',
   // Once the 485 is granted, say until when, e.g. "Full work rights until March 2029."
   workRights: 'Full work rights in Australia, no sponsorship needed. Available full-time.',
+  workRightsInBrief,
   visa: 'Applying for a 2-year Temporary Graduate visa (subclass 485).',
   headline: 'I map how work really happens',
   lead: 'Then I write the requirements a team can build, and plan the tests that prove the change worked.',
-  // The big statement under the hero.
+  // Opens the About section, next to your photo.
   statement:
     'Product owner in digital banking. Three years on Melbourne warehouse floors and delivery routes. A Master of IT. I bring all three to business analysis: the stakeholders, the technology, and the people doing the work.',
   facts: [
     { label: 'Product Owner', value: 'Bank Central Asia, 2022' },
     { label: 'Warehouse and delivery', value: 'Melbourne, 2023 to now' },
     { label: 'Master of IT', value: 'Kaplan Business School, graduating Dec 2026' },
-    { label: 'Work rights', value: 'Full work rights, no sponsorship needed' },
+    { label: 'Work rights', value: workRightsInBrief },
   ],
 };
 
-// What a team gets from you. `art` picks the small drawing; `shownIn` lists case study slugs.
-export const deliverables = [
-  {
-    art: 'process',
-    title: 'Process maps',
-    text: 'As-is and to-be maps in BPMN, with the pain points marked, so the whole team works from one picture.',
-    shownIn: ['idriver'],
-  },
-  {
-    art: 'requirements',
-    title: 'Requirements',
-    text: 'Functional and non-functional requirements, prioritised with MoSCoW, each one written so it can be tested.',
-    shownIn: ['idriver'],
-  },
-  {
-    art: 'stories',
-    title: 'User stories',
-    text: 'Stories with Given/When/Then acceptance criteria that a developer can build and a tester can check.',
-    shownIn: ['idriver'],
-  },
-  {
-    art: 'testing',
-    title: 'UAT plans',
-    text: 'Who tests, what has to pass before release, and the success measures that show the change worked.',
-    shownIn: ['idriver'],
-  },
-  {
-    art: 'options',
-    title: 'Business cases',
-    text: 'Options compared on cost, risk, time to benefit and fit, with a recommendation and a staged plan.',
-    shownIn: ['energyai'],
-  },
-  {
-    art: 'sql',
-    title: 'SQL and reporting',
-    text: 'Queries that check the success measures, and reporting in Power BI and Tableau (course in progress).',
-    shownIn: ['idriver'],
-  },
-] as const;
-
-// The personal story band, next to your photo.
+// The About section: your photo and the story behind the work.
 export const story = {
   kicker: 'Why the floor matters',
   title: 'I’ve done the work the software is for',
@@ -81,6 +50,8 @@ export const story = {
 export type MethodStep = {
   title: string;
   text: string;
+  // The small drawing of what this step hands over.
+  art: ArtKind;
   // Case study slugs (their file names) that show this step.
   shownIn?: string[];
   // Where this step is shown when it isn't a case study, e.g. a job.
@@ -92,31 +63,37 @@ export const method: MethodStep[] = [
   {
     title: 'Understand',
     text: 'Talk to the people who do the work and watch it being done. Stakeholder analysis and requirements elicitation.',
+    art: 'stakeholders',
     shownIn: ['idriver'],
   },
   {
     title: 'Map',
     text: 'Draw the as-is process in BPMN, mark the pain points, then design the to-be.',
+    art: 'process',
     shownIn: ['idriver'],
   },
   {
     title: 'Define',
     text: 'Functional and non-functional requirements, MoSCoW priorities and user stories with Given/When/Then acceptance criteria. When the decision is bigger than a feature, options analysis and a business case.',
+    art: 'requirements',
     shownIn: ['idriver', 'energyai'],
   },
   {
     title: 'Deliver',
     text: 'Work with developers across the SDLC, from discovery to release: backlog refinement, prioritisation and scope decisions in Agile and Scrum teams.',
+    art: 'backlog',
     evidence: 'Shown as Product Owner at Bank Central Asia',
   },
   {
     title: 'Test',
     text: 'Plan user acceptance testing with the people who will use the change, and agree what has to pass before release.',
+    art: 'testing',
     shownIn: ['idriver'],
   },
   {
     title: 'Measure',
     text: 'Set success measures and check them with data: SQL, Excel, and reporting in Power BI and Tableau (course in progress).',
+    art: 'sql',
     shownIn: ['idriver', 'energyai'],
   },
 ];
@@ -198,7 +175,7 @@ export const education = [
     org: 'Kaplan Business School',
     place: 'Melbourne',
     dates: '2025–2026',
-    note: 'Course completed, graduating December 2026. Also doing a Power BI and Tableau course (Oct–Dec 2026).',
+    note: 'Course completed, graduating December 2026.',
   },
   {
     title: 'Bachelor of Information Technology',
@@ -207,3 +184,16 @@ export const education = [
     dates: '2015–2019',
   },
 ];
+
+export type Certificate = {
+  title: string;
+  org?: string;
+  dates: string;
+  // A link to check the certificate, once you have one.
+  url?: string;
+};
+
+// Certificates and short courses, newest first. Add the IBM certificate the
+// day you start it, and its `url` once you finish, e.g.
+// { title: 'IBM Business Analyst Professional Certificate', org: 'Coursera', dates: 'In progress, expected March 2027' },
+export const certificates: Certificate[] = [{ title: 'Power BI and Tableau course', dates: 'Oct–Dec 2026, in progress' }];

@@ -1,14 +1,38 @@
 // Small drawings of each kind of BA deliverable. They show the shape of the
 // work, not real content: lines stand in for text.
 
+import { Fragment } from 'react';
+import type { ProcessMapData } from '@/components/ProcessMap';
+
 const Line = ({ w, accent = false }: { w: string; accent?: boolean }) => (
   <span className={`block h-1.5 rounded-full ${accent ? 'bg-accent' : 'bg-fg/25'}`} style={{ width: w }} />
 );
 
-export type ArtKind = 'process' | 'requirements' | 'stories' | 'testing' | 'options' | 'sql';
+export type ArtKind = 'stakeholders' | 'process' | 'requirements' | 'backlog' | 'testing' | 'sql';
 
 export function DeliverableArt({ kind }: { kind: ArtKind }) {
   switch (kind) {
+    case 'stakeholders':
+      // A power and interest grid, with the stakeholder to manage closely marked.
+      return (
+        <div className="relative h-16 w-28 border-b-[1.5px] border-l-[1.5px] border-fg" aria-hidden="true">
+          <span className="absolute inset-x-0 top-1/2 h-px bg-fg/25" />
+          <span className="absolute inset-y-0 left-1/2 w-px bg-fg/25" />
+          {[
+            { x: 76, y: 24, key: true },
+            { x: 28, y: 32, key: false },
+            { x: 88, y: 62, key: false },
+            { x: 60, y: 74, key: false },
+            { x: 20, y: 78, key: false },
+          ].map((dot) => (
+            <span
+              key={`${dot.x}-${dot.y}`}
+              className={`absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full ${dot.key ? 'bg-accent' : 'bg-fg/40'}`}
+              style={{ left: `${dot.x}%`, top: `${dot.y}%` }}
+            />
+          ))}
+        </div>
+      );
     case 'process':
       return (
         <div className="flex items-center gap-1.5" aria-hidden="true">
@@ -38,13 +62,20 @@ export function DeliverableArt({ kind }: { kind: ArtKind }) {
           ))}
         </div>
       );
-    case 'stories':
+    case 'backlog':
+      // A sprint board, with the work in progress marked.
       return (
-        <div className="grid w-full max-w-56 gap-2 rounded-[4px] border border-line bg-sheet p-3" aria-hidden="true">
-          {['As a', 'I want', 'So that'].map((lead, i) => (
-            <div key={lead} className="flex items-center gap-2">
-              <span className="label w-16 shrink-0 whitespace-nowrap text-accent">{lead}</span>
-              <Line w={['60%', '75%', '50%'][i]} />
+        <div className="grid w-full max-w-56 grid-cols-3 gap-3" aria-hidden="true">
+          {[
+            { column: 'To do', cards: 3 },
+            { column: 'Doing', cards: 1 },
+            { column: 'Done', cards: 2 },
+          ].map(({ column, cards }) => (
+            <div key={column} className="grid content-start gap-1.5">
+              <span className="label whitespace-nowrap text-muted">{column}</span>
+              {Array.from({ length: cards }, (_, i) => (
+                <span key={i} className={`h-3 rounded-[2px] ${column === 'Doing' ? 'bg-accent' : 'bg-fg/25'}`} />
+              ))}
             </div>
           ))}
         </div>
@@ -63,24 +94,6 @@ export function DeliverableArt({ kind }: { kind: ArtKind }) {
           ))}
         </div>
       );
-    case 'options':
-      return (
-        <div className="grid grid-cols-[repeat(5,1.25rem)] gap-1.5" aria-hidden="true">
-          {Array.from({ length: 20 }, (_, i) => {
-            const row = Math.floor(i / 5);
-            const col = i % 5;
-            if (col === 0) return <span key={i} className="label text-muted">{['A', 'B', 'C', 'D'][row]}</span>;
-            const score = (row * 3 + col * 2) % 4;
-            return (
-              <span
-                key={i}
-                className={`h-5 w-5 rounded-full ${row === 3 ? 'bg-accent' : 'border border-fg/40'}`}
-                style={row === 3 ? undefined : { opacity: 0.35 + score * 0.2 }}
-              />
-            );
-          })}
-        </div>
-      );
     case 'sql':
       return (
         <div className="grid w-full max-w-56 gap-3" aria-hidden="true">
@@ -93,6 +106,34 @@ export function DeliverableArt({ kind }: { kind: ArtKind }) {
         </div>
       );
   }
+}
+
+// A case study's process map in miniature, for its card: each lane's tasks as
+// boxes, pain points filled in. Box sizes follow the card's width, so a
+// shorter to-be lane reads as a shorter flow.
+export function FlowArt({ map }: { map: ProcessMapData }) {
+  return (
+    <div className="@container w-full" aria-hidden="true">
+      <div className="mx-auto grid w-max gap-6">
+        {map.lanes.map((lane) => (
+          <div key={lane.label} className="flex items-center">
+            <span className="label mr-3 w-12 shrink-0 text-muted">{lane.label}</span>
+            <span className="h-3.5 w-3.5 shrink-0 rounded-full border-[1.5px] border-fg" />
+            {lane.steps.map((step, i) => (
+              <Fragment key={i}>
+                <span className="h-px w-[3cqw] shrink-0 bg-fg" />
+                <span
+                  className={`h-[6.5cqw] w-[10cqw] shrink-0 rounded-[4px] ${step.pain ? 'bg-signal' : 'border-[1.5px] border-fg'}`}
+                />
+              </Fragment>
+            ))}
+            <span className="h-px w-[3cqw] shrink-0 bg-fg" />
+            <span className="h-3.5 w-3.5 shrink-0 rounded-full border-[3px] border-fg" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 // EnergyAI's four barriers, each tied to every other: they fed into each other.

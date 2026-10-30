@@ -26,6 +26,8 @@
   html {
     background: var(--night);
     color-scheme: dark;
+    /* The sticky header's height, so a link to a section lands just below it. */
+    scroll-padding-top: 4rem;
   }
 
   body {
@@ -82,7 +84,7 @@
     position: absolute;
     top: -3rem;
     left: 1rem;
-    z-index: 10;
+    z-index: 30;
     padding: 0.5rem 0.75rem;
     border-radius: 4px;
     background: var(--signal);
@@ -455,7 +457,8 @@
     }
   }
 
-  /* How I work: the steps laid out like stops on a delivery route. */
+  /* How I work: the steps laid out like stops on a delivery route, each with
+     a drawing of what it hands over. Two rows of three from 64rem. */
   .route {
     display: grid;
     gap: 2.25rem;
@@ -499,8 +502,8 @@
 
   @media (min-width: 64rem) {
     .route {
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 1.75rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 4rem 2.5rem;
     }
 
     .route-stop {
@@ -512,9 +515,14 @@
       top: 0.75rem;
       bottom: auto;
       left: 1.625rem;
-      right: -1.75rem;
+      right: -2.5rem;
       width: auto;
       height: 2px;
+    }
+
+    /* Each row ends its own stretch of the route. */
+    .route-stop:nth-child(3n)::before {
+      display: none;
     }
   }
 

@@ -15,16 +15,18 @@ Open http://localhost:3000.
 
 | What | Where |
 | --- | --- |
-| Intro, experience, skills, education, contact details | `content/profile.ts` |
+| Intro, how you work, experience, education, certificates, skills, contact details and the site's address | `content/profile.ts` |
 | Case studies, one Markdown file each | `content/case-studies/` |
 | Notes, a learning log | `content/notes/` |
 | Resume PDF and images | `public/` |
 | The process map | `components/ProcessMap.tsx` |
+| The small drawings in How I work and on the case study cards | `components/Art.tsx` |
+| Link previews, the image shown when someone shares a link | `app/opengraph-image.tsx`, and `app/case-studies/[slug]/opengraph-image.tsx` for each case study |
 
 ## Add a case study
 
 1. Copy `content/case-studies/energyai.md` to a new file. The file name becomes the URL: `payroll.md` is served at `/case-studies/payroll`.
-2. Fill in the frontmatter: `title`, `context`, `year`, `order` (lower comes first), `summary`, `outcome`, `methods`, `deliverables`, and optionally `role`, `tools` and `processMap`.
+2. Fill in the frontmatter: `title`, `context`, `year`, `order` (lower comes first), `summary`, `outcome` (it also leads the link preview), `methods`, `deliverables` (listed under "What I delivered" beside the story), and optionally `kind`, `role`, `tools` and `processMap`. For the card on the home page, set `cover` to an image, or `coverArt: flow` to draw the case study's process map.
 3. Write the story underneath: the context, the problem, what you did, the result, and what you'd do differently. Tables, images and SQL code blocks all work in Markdown.
 
 Add `draft: true` to keep a case study off the published site while you write it (`reporting-dashboard.md` is one, waiting for your Power BI or Tableau project).
@@ -53,7 +55,7 @@ It shows in an orange draft box in `npm run dev` and stays off the published sit
 
 ## Notes
 
-Copy `content/notes/_template.md` to a new file and write. The Notes section appears on the home page once a note is published (no `draft: true`).
+Copy `content/notes/_template.md` to a new file and write. A "What I'm learning" list appears under Skills on the home page once a note is published (no `draft: true`). It suits a log of a course, such as one note per module.
 
 ## Before you publish
 
@@ -61,6 +63,8 @@ Copy `content/notes/_template.md` to a new file and write. The Notes section app
 - Check the iDriver process map steps in `idriver.md` against your draw.io map.
 - Anyone can download the resume in `public/`, and it includes your phone number.
 - Update `workRights` in `content/profile.ts` when your 485 is granted.
+- When you add your own domain, change `site` in `content/profile.ts` so link previews and the sitemap use it.
+- Add each certificate to `certificates` in `content/profile.ts` the day you start it.
 
 ## Deploy
 

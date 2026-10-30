@@ -16,7 +16,13 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const study = getCaseStudy((await params).slug);
-  return study ? { title: study.title, description: study.summary } : {};
+  if (!study) return {};
+  return {
+    title: study.title,
+    description: study.summary,
+    // Without its own, a shared link would show the home page's title.
+    openGraph: { title: `${study.title} | ${profile.name}`, description: study.summary, type: 'article', locale: 'en_AU' },
+  };
 }
 
 export default async function CaseStudyPage({ params }: Props) {
@@ -64,7 +70,27 @@ export default async function CaseStudyPage({ params }: Props) {
       </section>
 
       <Band tone="day" className="py-16 lg:py-24">
-        <div className="md" dangerouslySetInnerHTML={{ __html: study.html }} />
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,70ch)_17rem] lg:justify-between">
+          {/* First on phones; beside the story, and following it down, on wide screens. */}
+          {study.deliverables.length > 0 && (
+            <aside
+              aria-labelledby="delivered-title"
+              className="rounded-md border border-line bg-sheet p-6 lg:sticky lg:top-24 lg:order-last lg:self-start"
+            >
+              <h2 id="delivered-title" className="label text-accent">
+                What I delivered
+              </h2>
+              <ul className="mt-4 grid gap-3 text-[0.9375rem] leading-snug">
+                {study.deliverables.map((item) => (
+                  <li key={item} className="border-t border-line pt-3 first:border-t-0 first:pt-0">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          )}
+          <div className="md" dangerouslySetInnerHTML={{ __html: study.html }} />
+        </div>
       </Band>
 
       <Band tone="night" className="py-16 lg:py-24">

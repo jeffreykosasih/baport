@@ -14,8 +14,9 @@ export type CaseStudy = {
   // The kind of work, shown as a tag: "Process improvement", "Business case".
   kind?: string;
   // An image for the case study card, or a drawing when there is no image.
+  // `flow` draws the case study's own process map.
   cover?: string;
-  coverArt?: 'barriers' | 'chart';
+  coverArt?: 'flow' | 'barriers' | 'chart';
   year: number;
   order: number;
   summary: string;
