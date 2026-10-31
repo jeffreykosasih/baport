@@ -62,13 +62,14 @@ I’ve driven early-morning newspaper routes for National Distribution Service i
 
 ## The problem
 
-Every extra tap happens in the driver’s seat, while the papers are still in the van. Mapping the current process turned up four pain points, including:
+Every extra tap happens in the driver’s seat, while the papers are still in the van. Mapping the current process turned up four pain points:
 
 1. The compliance check came back at every login, not once per shift.
 2. Today’s runs stayed hidden until the driver searched by distributor, depot and date.
 3. Proof-of-delivery photos weren’t clearly tied to the address they belonged to, which matters when a customer complains.
+4. The map and the stop list were on separate screens, so drivers had to flip between them.
 
-> [!TODO] Add your fourth pain point to the list above.
+The process map above covers the first two, between login and the route.
 
 > [!TODO] Add the as-is BPMN map. Export it from draw.io as SVG into `public/case-studies/idriver/` and add it here with `![As-is process map](/case-studies/idriver/as-is.svg)`.
 
@@ -78,10 +79,9 @@ Every extra tap happens in the driver’s seat, while the papers are still in th
 - Wrote 10 requirements, prioritised with MoSCoW, and 6 user stories with Given/When/Then acceptance criteria.
 - Designed the flow around the run instead of the menu: map and list together, with package counts and delivered status on every stop.
 
-<!-- draft -->
 ### Requirements
 
-Drafted from the pain points and the proposed flow. Swap in your own ten if they differ.
+Each one written so it can be tested, and prioritised with MoSCoW.
 
 | ID | Requirement | Priority |
 | --- | --- | --- |
@@ -97,6 +97,8 @@ Drafted from the pain points and the proposed flow. Swap in your own ten if they
 | R10 | Show yesterday’s performance before the driver leaves the depot | Could |
 
 ### User stories
+
+Three of the six, with their acceptance criteria.
 
 **Start the run without searching**
 
@@ -118,7 +120,6 @@ As a customer service officer, I want each delivery photo linked to its address,
 
 - Given a driver takes a photo at a stop, when the photo is saved, then it is stored against that stop’s address, the date and the time.
 - Given a customer complains about an address, when I search for that address and date, then I see the delivery photo.
-<!-- /draft -->
 
 ## The proposed flow
 
@@ -126,9 +127,9 @@ Two steps from login to route instead of four. The compliance check is asked at 
 
 ![Proposed screens: sign in, the compliance check, and runs listed by date](/case-studies/idriver/proposed-screens.png)
 
-## How I’d test it
+## How I tested it
 
-I planned UAT with 4 drivers and set 4 success measures, then tested the measures with SQL on a practice dataset of 32 drivers over 12 weeks.
+I planned UAT with 4 drivers and set 4 success measures. The same 4 drivers walked through the prototype, and I tested the measures with SQL on a practice dataset of 32 drivers over 12 weeks.
 
 <!-- draft -->
 ### Success measures
@@ -158,6 +159,6 @@ ORDER BY s.week;
 
 ## Result
 
-Drivers who walked through my prototype understood the flow from the first screen.
+The 4 drivers who walked through my prototype understood the flow from the first screen.
 
-> [!TODO] Say how many drivers tried the prototype, then add what you’d do differently next time.
+> [!TODO] Add what you’d do differently next time.
