@@ -4,7 +4,7 @@ context: Capstone, Kaplan Business School
 kind: Business case
 coverArt: barriers
 year: 2026
-order: 2
+order: 3
 summary: >-
   A case-study client in the energy sector kept running AI pilots that stalled
   before going live. I showed how four barriers fed into each other, compared

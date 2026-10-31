@@ -2,9 +2,9 @@
 title: Reporting dashboard (draft)
 context: Power BI and Tableau course project
 kind: Reporting
-coverArt: chart
+coverArt: sql
 year: 2026
-order: 3
+order: 4
 draft: true
 summary: >-
   A draft slot for the reporting case study most BA ads now ask for. It only

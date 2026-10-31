@@ -1,5 +1,3 @@
-import type { CSSProperties, ReactNode } from 'react';
-
 export type FlowStep = { label: string; note?: string; pain?: boolean };
 export type Lane = { label: string; end?: string; steps: FlowStep[] };
 export type ProcessMapData = { title: string; caption?: string; lanes: Lane[] };
@@ -7,19 +5,11 @@ export type ProcessMapData = { title: string; caption?: string; lanes: Lane[] };
 // A BPMN-style process map: one pool per lane, each running from a start
 // event through its tasks to an end event. `pain` marks a pain point and
 // `note` becomes a text annotation on the task.
-export function ProcessMap({
-  map,
-  animate = false,
-  children,
-}: {
-  map: ProcessMapData;
-  animate?: boolean;
-  children?: ReactNode;
-}) {
+export function ProcessMap({ map }: { map: ProcessMapData }) {
   const hasPain = map.lanes.some((lane) => lane.steps.some((step) => step.pain));
 
   return (
-    <figure className="pmap" data-animate={animate || undefined}>
+    <figure className="pmap">
       <div className="pmap-sheet">
         <p className="pmap-title label text-muted">{map.title}</p>
         <div className="pmap-lanes">
@@ -35,12 +25,7 @@ export function ProcessMap({
                 <span className="event" aria-hidden="true" />
                 <ol className="steps">
                   {lane.steps.map((step, i) => (
-                    <li
-                      key={`${i}-${step.label}`}
-                      className="node"
-                      data-pain={step.pain || undefined}
-                      style={{ '--i': i } as CSSProperties}
-                    >
+                    <li key={`${i}-${step.label}`} className="node" data-pain={step.pain || undefined}>
                       <span className="task">
                         {step.label}
                         {step.pain && <span className="sr-only"> (pain point)</span>}
@@ -49,7 +34,7 @@ export function ProcessMap({
                     </li>
                   ))}
                 </ol>
-                <div className="node node-end" style={{ '--i': lane.steps.length } as CSSProperties}>
+                <div className="node node-end">
                   <span className="event event-end" aria-hidden="true" />
                   {lane.end && <span className="end-label">{lane.end}</span>}
                 </div>
@@ -64,12 +49,7 @@ export function ProcessMap({
           </p>
         )}
       </div>
-      {(map.caption || children) && (
-        <figcaption className="pmap-caption">
-          {map.caption}
-          {children}
-        </figcaption>
-      )}
+      {map.caption && <figcaption className="pmap-caption">{map.caption}</figcaption>}
     </figure>
   );
 }

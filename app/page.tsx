@@ -2,13 +2,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { BarrierArt, DeliverableArt, FlowArt } from '@/components/Art';
 import { Band, BandHead } from '@/components/Band';
-import { ProcessMap } from '@/components/ProcessMap';
 import { certificates, education, experience, method, profile, skills, story } from '@/content/profile';
 import { formatDate, getCaseStudies, getNotes } from '@/lib/content';
 
 export default function Home() {
   const studies = getCaseStudies();
-  const featured = studies.find((study) => study.processMap);
   const notes = getNotes();
   const titleOf = (slug: string) => studies.find((study) => study.slug === slug)?.title ?? slug;
 
@@ -28,41 +26,44 @@ export default function Home() {
     <>
       <section className="band-night">
         <div className="mx-auto max-w-7xl px-4 pt-10 pb-16 sm:px-8 lg:pt-20 lg:pb-24">
-          <p className="label flex flex-wrap gap-x-5 gap-y-2">
-            <span className="text-accent">
-              {profile.role}, {profile.location}
-            </span>
-            <span className="text-muted">{profile.workRightsInBrief}</span>
+          <p className="label text-accent">
+            {profile.role}, {profile.location}
           </p>
           <h1 className="display mt-6 max-w-5xl text-[3rem] sm:text-[4.5rem] lg:text-[6.5rem]">{profile.headline}</h1>
-          <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-            <p className="max-w-[52ch] text-[1.25rem] leading-normal text-muted">{profile.lead}</p>
-            <div className="flex flex-wrap gap-3">
-              <a className="btn btn-signal" href={`mailto:${profile.email}`}>
-                Email me
-              </a>
-              <a className="btn" href={profile.resume}>
-                Resume (PDF)
-              </a>
-              <a className="btn" href={profile.linkedin}>
-                LinkedIn
-              </a>
+          <div className="mt-10 grid grid-cols-[6rem_minmax(0,1fr)] items-start gap-x-5 gap-y-8 sm:grid-cols-[9rem_minmax(0,1fr)] lg:mt-14 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-center lg:gap-x-10">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-md">
+              {/* Zoomed in on the person: most of the original photo is trees. */}
+              <Image
+                src={profile.photo}
+                alt={profile.photoAlt}
+                fill
+                preload
+                sizes="(min-width: 1024px) 36rem, (min-width: 640px) 23rem, 15rem"
+                className="origin-[35%_62%] scale-[2.5] object-cover"
+              />
+            </div>
+            {/* The buttons sit under the intro on wide screens, and across the full width below the photo on smaller ones. */}
+            <div className="contents lg:block">
+              <p className="max-w-[46ch] text-[1.125rem] leading-normal sm:text-[1.375rem]">{profile.intro}</p>
+              <div className="col-span-2 flex flex-wrap gap-3 lg:mt-8">
+                <a className="btn btn-signal" href={`mailto:${profile.email}`}>
+                  Email me
+                </a>
+                <a className="btn" href={profile.resume}>
+                  Resume (PDF)
+                </a>
+                <a className="btn" href={profile.linkedin}>
+                  LinkedIn
+                </a>
+              </div>
             </div>
           </div>
-          {featured?.processMap && (
-            <div className="mt-16 lg:mt-20">
-              <ProcessMap map={featured.processMap} animate>
-                {' '}
-                <Link href={`/case-studies/${featured.slug}`}>Read the {featured.title} case study</Link>
-              </ProcessMap>
-            </div>
-          )}
         </div>
       </section>
 
       <Band tone="day" id="work" className="py-20 lg:py-28">
         <BandHead id="work" kicker="Case studies" title="From the field" />
-        <ul className="mt-14 grid gap-6 md:grid-cols-2">
+        <ul className={`mt-14 grid gap-6 ${studies.length > 2 ? 'lg:grid-cols-3' : 'md:grid-cols-2'}`}>
           {studies.map((study) => (
             <li key={study.slug}>
               <article className="flex h-full flex-col overflow-hidden rounded-md border border-line bg-sheet">
@@ -70,17 +71,21 @@ export default function Home() {
                 <div className="band-night relative aspect-[16/10] overflow-hidden">
                   {study.cover ? (
                     <Image src={study.cover} alt="" fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
-                  ) : study.coverArt === 'flow' && study.processMap ? (
-                    <div className="flex h-full items-center px-6 sm:px-10">
-                      <FlowArt map={study.processMap} />
-                    </div>
+                  ) : study.coverArt === 'flow' ? (
+                    study.processMap && (
+                      <div className="flex h-full items-center px-6 sm:px-10">
+                        <FlowArt map={study.processMap} />
+                      </div>
+                    )
                   ) : study.coverArt === 'barriers' ? (
                     <div className="flex h-full items-center px-6">
                       <BarrierArt />
                     </div>
-                  ) : study.coverArt === 'chart' ? (
+                  ) : study.coverArt ? (
                     <div className="flex h-full items-center justify-center px-6">
-                      <DeliverableArt kind="sql" />
+                      <div className="flex w-56 justify-center sm:scale-125 lg:scale-[1.4]">
+                        <DeliverableArt kind={study.coverArt} />
+                      </div>
                     </div>
                   ) : null}
                 </div>
@@ -132,28 +137,16 @@ export default function Home() {
       </Band>
 
       <Band tone="day" id="about" className="py-20 lg:py-28">
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-20">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-md">
-            {/* Zoomed in on the person: most of the original photo is trees. */}
-            <Image
-              src={story.image}
-              alt={story.imageAlt}
-              fill
-              sizes="(min-width: 1024px) 60vw, 140vw"
-              className="origin-[36%_92%] scale-150 object-cover"
-            />
-          </div>
-          <div>
-            <BandHead id="about" kicker={story.kicker} title={story.title} />
-            <p className="mt-8 max-w-[56ch] text-[1.375rem] leading-snug font-medium">{profile.statement}</p>
-            <div className="mt-6 grid max-w-[56ch] gap-4">
-              {story.paragraphs.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-            </div>
+        <BandHead id="about" kicker={story.kicker} title={story.title} />
+        <div className="mt-10 grid gap-x-20 gap-y-6 lg:mt-14 lg:grid-cols-2">
+          <p className="text-[1.375rem] leading-snug font-medium lg:text-[1.625rem]">{profile.statement}</p>
+          <div className="grid max-w-[56ch] content-start gap-4">
+            {story.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
           </div>
         </div>
-        <dl className="mt-14 grid gap-x-10 gap-y-6 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4">
+        <dl className="mt-14 grid gap-x-10 gap-y-6 md:grid-cols-3 lg:mt-20">
           {profile.facts.map((fact) => (
             <div key={fact.label} className="border-t border-line pt-4">
               <dt className="label text-accent">{fact.label}</dt>
@@ -274,9 +267,6 @@ export default function Home() {
             Resume (PDF)
           </a>
         </div>
-        <p className="mt-10 max-w-[60ch] text-[1rem] text-muted">
-          {profile.workRights} {profile.visa}
-        </p>
       </Band>
     </>
   );

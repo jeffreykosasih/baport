@@ -3,9 +3,6 @@
 
 import type { ArtKind } from '@/components/Art';
 
-// Shown next to your role at the top of the page, and in the About facts.
-const workRightsInBrief = 'Full work rights, no sponsorship needed';
-
 export const profile = {
   name: 'Jeffrey Kosasih',
   role: 'Junior ICT business analyst',
@@ -17,29 +14,29 @@ export const profile = {
   // The site's address, used by link previews and the sitemap. Change it when
   // you add your own domain.
   site: 'https://jk-ba-port.vercel.app',
-  // Once the 485 is granted, say until when, e.g. "Full work rights until March 2029."
-  workRights: 'Full work rights in Australia, no sponsorship needed. Available full-time.',
-  workRightsInBrief,
-  visa: 'Applying for a 2-year Temporary Graduate visa (subclass 485).',
   headline: 'I map how work really happens',
+  // The hello next to your photo at the top of the page. Change the
+  // certificate part once you've started it.
+  intro:
+    'Hi, I’m Jeffrey. I’m looking for a junior business analyst role in Melbourne. Below are my case studies, and next I’m starting the IBM Business Analyst Professional Certificate.',
+  photo: '/jeffrey-kosasih.jpg',
+  photoAlt: 'Jeffrey Kosasih sitting among autumn trees',
+  // The line under the headline in link previews.
   lead: 'Then I write the requirements a team can build, and plan the tests that prove the change worked.',
-  // Opens the About section, next to your photo.
+  // Opens the About section.
   statement:
     'Product owner in digital banking. Three years on Melbourne warehouse floors and delivery routes. A Master of IT. I bring all three to business analysis: the stakeholders, the technology, and the people doing the work.',
   facts: [
     { label: 'Product Owner', value: 'Bank Central Asia, 2022' },
     { label: 'Warehouse and delivery', value: 'Melbourne, 2023 to now' },
     { label: 'Master of IT', value: 'Kaplan Business School, graduating Dec 2026' },
-    { label: 'Work rights', value: workRightsInBrief },
   ],
 };
 
-// The About section: your photo and the story behind the work.
+// The About section: the story behind the work.
 export const story = {
   kicker: 'Why the floor matters',
   title: 'I’ve done the work the software is for',
-  image: '/jeffrey-kosasih.jpg',
-  imageAlt: 'Jeffrey Kosasih sitting among autumn trees',
   paragraphs: [
     'For three years I’ve picked and packed orders, driven forklifts and delivered newspapers on early-morning routes across Melbourne, alongside full-time study.',
     'I’ve set up shipments in Cin7 and logged in to a delivery app at the start of every run, so I know what a slow or confusing screen costs a shift. The iDriver case study came out of those routes.',

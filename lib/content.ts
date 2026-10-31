@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
+import type { ArtKind } from '@/components/Art';
 import type { ProcessMapData } from '@/components/ProcessMap';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
@@ -13,10 +14,11 @@ export type CaseStudy = {
   context: string;
   // The kind of work, shown as a tag: "Process improvement", "Business case".
   kind?: string;
-  // An image for the case study card, or a drawing when there is no image.
-  // `flow` draws the case study's own process map.
+  // An image for the case study card, or a drawing when there is no image:
+  // `flow` draws the case study's own process map, `barriers` EnergyAI's four
+  // barriers, and any other name one of the small drawings in Art.tsx.
   cover?: string;
-  coverArt?: 'flow' | 'barriers' | 'chart';
+  coverArt?: 'flow' | 'barriers' | ArtKind;
   year: number;
   order: number;
   summary: string;
